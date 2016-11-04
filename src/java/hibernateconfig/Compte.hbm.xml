@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19 janv. 2014 18:12:27 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+  <class catalog="banque" name="BusinessLayer.model.Compte" table="compte">
+    <composite-id class="BusinessLayer.model.CompteId" name="id">
+      <key-property name="idCompte" type="int">
+        <column name="idCompte"/>
+        
+      </key-property>
+      <key-property name="utilisateurId" type="int">
+        <column name="Utilisateur_id"/>
+      </key-property>
+    </composite-id>
+    <many-to-one class="BusinessLayer.model.Utilisateur" fetch="select" insert="false" name="utilisateur" update="false">
+      <column name="Utilisateur_id" not-null="true"/>
+    </many-to-one>
+    <property name="dateOuverture" type="date">
+      <column length="10" name="DateOuverture"/>
+    </property>
+    <property name="solde" type="java.lang.Double">
+      <column name="Solde" precision="22" scale="0"/>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="transactions" table="transaction">
+      <key>
+        <column name="Compte_idCompte" not-null="true"/>
+        <column name="Compte_Utilisateur_id" not-null="true"/>
+      </key>
+      <one-to-many class="BusinessLayer.model.Transaction"/>
+    </set>
+  </class>
+</hibernate-mapping>

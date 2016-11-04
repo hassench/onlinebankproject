@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19 janv. 2014 18:12:27 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+  <class catalog="banque" name="BusinessLayer.model.Transaction" table="transaction">
+    <composite-id class="BusinessLayer.model.TransactionId" name="id">
+      <key-property name="idTransaction" type="int">
+        <column name="idTransaction"/>
+      </key-property>
+      <key-property name="compteIdCompte" type="int">
+        <column name="Compte_idCompte"/>
+      </key-property>
+      <key-property name="compteUtilisateurId" type="int">
+        <column name="Compte_Utilisateur_id"/>
+      </key-property>
+    </composite-id>
+    <many-to-one class="BusinessLayer.model.Compte" fetch="select" insert="false" name="compte" update="false">
+      <column name="Compte_idCompte" not-null="true"/>
+      <column name="Compte_Utilisateur_id" not-null="true"/>
+    </many-to-one>
+    <property name="date" type="date">
+      <column length="10" name="Date"/>
+    </property>
+    <property name="somme" type="java.lang.String">
+      <column name="Somme" length="30"/>
+    </property>
+  </class>
+</hibernate-mapping>

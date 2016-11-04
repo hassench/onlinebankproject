@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd" >
+
+    
+    <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>
+
+    <!--
+    Most controllers will use the ControllerClassNameHandlerMapping above, but
+    for the index controller we are using ParameterizableViewController, so we must
+    define an explicit mapping for it.
+    -->
+    <!-- les mappings de l'application Ce sont les mappings url vers controller. -->
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <bean
+                class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+                <property name="location">
+                    <value>mappings.properties</value>
+                </property>
+            </bean>
+        </property>
+        <property name="interceptors">
+            <list>
+                <!-- <ref bean="loginInterceptor" /> -->
+                <ref bean="openSessionInViewInterceptor" />
+            </list>
+        </property>
+    </bean>
+        
+    <bean id="openSessionInViewInterceptor"
+              class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+        <property name="singleSession" value="true" />
+        <property name="flushModeName">
+            <value>FLUSH_AUTO</value>
+        </property>
+                
+    </bean>
+      
+      
+
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:prefix="/WEB-INF/jsp/"
+          p:suffix=".jsp" />
+
+    <!--
+    The index controller.
+    -->
+    <bean name="indexController"
+          class="org.springframework.web.servlet.mvc.ParameterizableViewController"
+          p:viewName="index" />
+    
+    <bean id="loginController" class="web.Controller.LoginController"/>
+   
+    <bean id="contentController" class="web.Controller.ContentController"/>
+   
+    <bean id="accessdeniedController" class="web.Controller.AccessDeniedController"/>
+   
+    <bean id="adduserController" class="web.Controller.AddUserController">
+        <property name="sessionForm">
+            <value>true</value>
+        </property>
+        <property name="formView">
+            <value>usercreation</value>
+        </property>
+        <property name="adduserservice">
+            <ref bean="adduserService" />
+        </property>
+        <property name="validator">
+            <ref bean="validAddAccount" />
+        </property>
+        <property name="commandName">
+            <value>commandAddUser</value>
+        </property>
+                
+    </bean>
+        
+    <bean id="addaccountController" class="web.Controller.AddAccountController">
+        <property name="sessionForm">
+            <value>true</value>
+        </property>
+        <property name="formView">
+            <value>accountcreation</value>
+        </property>
+        <property name="addaccountservice">
+            <ref bean="addaccounService" />
+        </property>
+               
+        <property name="commandName">
+            <value>commandAddAccount</value>
+        </property>
+    </bean>
+
+    <bean id="consultbalanceController" class="web.Controller.ConsultBalanceController">
+        <property name="sessionForm">
+            <value>true</value>
+        </property>
+        <property name="formView">
+            <value>balance</value>
+        </property>
+        <property name="consultbalanceservice">
+            <ref bean="consultbalanceService" />
+        </property>
+		
+        <property name="commandName">
+            <value>commandBalance</value>
+        </property>
+    </bean>
+        
+    <bean id="depositController" class="web.Controller.DepositController">
+        <property name="sessionForm">
+            <value>true</value>
+        </property>
+        <property name="formView">
+            <value>deposit</value>
+        </property>
+        <property name="depositservice">
+            <ref bean="depositService" />
+        </property>
+		
+        <property name="commandName">
+            <value>commandDeposit</value>
+        </property>
+    </bean>
+        
+    <bean id="withdrawController" class="web.Controller.WithdrawController">
+        <property name="sessionForm">
+            <value>true</value>
+        </property>
+        <property name="formView">
+            <value>withdrawal</value>
+        </property>
+        <property name="withdrawservice">
+            <ref bean="withdrawService" />
+        </property>
+		
+        <property name="commandName">
+            <value>commandWithdraw</value>
+        </property>
+    </bean>
+        
+    <bean id="transferController" class="web.Controller.TransferController">
+        <property name="sessionForm">
+            <value>true</value>
+        </property>
+        <property name="formView">
+            <value>transfer</value>
+        </property>
+        <property name="transferservice">
+            <ref bean="transferService" />
+        </property>
+		
+        <property name="commandName">
+            <value>commandTransfer</value>
+        </property>
+    </bean>
+        
+    <bean id="closeacController" class="web.Controller.CloseacController">
+        <property name="sessionForm">
+            <value>true</value>
+        </property>
+        <property name="formView">
+            <value>closeac</value>
+        </property>
+        <property name="closeacservice">
+            <ref bean="closeacService" />
+        </property>
+		
+        <property name="commandName">
+            <value>commandCloseac</value>
+        </property>
+    </bean>
+        
+    <bean id="searchController" class="web.Controller.SearchController">
+        <property name="sessionForm">
+            <value>true</value>
+        </property>
+        <property name="formView">
+            <value>search</value>
+        </property>
+        <property name="service">
+            <ref bean="searchService" />
+        </property>
+        <property name="validator">
+            <ref bean="validSearch" />
+        </property>
+        <property name="commandName">
+            <value>commandSearch</value>
+        </property>
+    </bean>
+        
+    <bean id="modificationController" class="web.Controller.ModificationController">
+        <property name="sessionForm">
+            <value>true</value>
+        </property>
+        <property name="formView">
+            <value>modification</value>
+        </property>
+        <property name="service">
+            <ref bean="searchService" />
+        </property>
+        <property name="validator">
+            <ref bean="validModification" />
+        </property>
+        <property name="commandName">
+            <value>commandModification</value>
+        </property>
+    </bean>
+        
+       
+        
+    <!-- couche métier -->
+    <bean id="validSearch" class="web.Validator.RechercheValidator" />
+    <bean id="validAddAccount" class="web.Validator.CreationUtilisateurValidator" />
+    <bean id="validModification" class="web.Validator.ModificationValidator" />
+        
+    <bean id="addaccounService" class="BusinessLayer.service.AddAccountService">
+        <property name="accountDAO">
+            <ref bean="accountDAO" />
+        </property>
+        <property name="userDAO">
+            <ref bean="userDAO" />
+        </property>
+        <property name="transactionDAO">
+            <ref bean="transactionDAO" />
+        </property>
+    </bean>
+    <bean id="adduserService" class="BusinessLayer.service.AddUserService">
+        <property name="userDAO">
+            <ref bean="userDAO" />
+        </property>
+    </bean>
+    <bean id="consultbalanceService" class="BusinessLayer.service.ConsultBalanceService">
+        <property name="accountDAO">
+            <ref bean="accountDAO" />
+        </property>
+        <property name="userDAO">
+            <ref bean="userDAO" />
+        </property>
+                
+    </bean>
+    <bean id="depositService" class="BusinessLayer.service.DepositService">
+        <property name="accountDAO">
+            <ref bean="accountDAO" />
+        </property>
+        <property name="userDAO">
+            <ref bean="userDAO" />
+        </property>
+        <property name="transactionDAO">
+            <ref bean="transactionDAO" />
+        </property>
+    </bean>
+    <bean id="withdrawService" class="BusinessLayer.service.WithdrawService">
+        <property name="accountDAO">
+            <ref bean="accountDAO" />
+        </property>
+        <property name="userDAO">
+            <ref bean="userDAO" />
+        </property>
+        <property name="transactionDAO">
+            <ref bean="transactionDAO" />
+        </property>
+    </bean>
+    <bean id="transferService" class="BusinessLayer.service.TransferService">
+        <property name="accountDAO">
+            <ref bean="accountDAO" />
+        </property>
+        <property name="userDAO">
+            <ref bean="userDAO" />
+        </property>
+        <property name="transactionDAO">
+            <ref bean="transactionDAO" />
+        </property>
+    </bean>
+    <bean id="closeacService" class="BusinessLayer.service.CloseacService">
+        <property name="accountDAO">
+            <ref bean="accountDAO" />
+        </property>
+        <property name="userDAO">
+            <ref bean="userDAO" />
+        </property>
+    </bean>
+    <bean id="searchService" class="BusinessLayer.service.SearchService">
+        <property name="rechercheDAO">
+            <ref bean="userDAO" />
+        </property>
+    </bean>
+
+    <!-- les DAOs -->
+    <bean id="accountDAO" class="DataBaseAcessLayer.AccountDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <bean id="userDAO" class="DataBaseAcessLayer.UserDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <bean id="transactionDAO" class="DataBaseAcessLayer.TransactionDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+        
+        
+    <bean id="sessionFactory"
+                class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <property name="configLocation">
+            <value>classpath:hibernateconfig/hibernate.cfg.xml</value>
+        </property>
+    </bean>
+        
+    <bean id="transactionManager"
+        class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <bean
+        class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter">
+    </bean>
+
+    <!-- To prevent browser's back button on displaying secured resource after logout -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="cacheSeconds" value="0" />
+    </bean>
+
+    <mvc:resources mapping="/favicon.ico" location="/favicon.ico" order="0"/>
+    <mvc:resources mapping="favicon.ico" location="favicon.ico" order="0"/>
+</beans>
+

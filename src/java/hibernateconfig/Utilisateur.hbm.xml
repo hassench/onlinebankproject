@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21 janv. 2014 17:07:49 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+  <class catalog="banque" name="BusinessLayer.model.Utilisateur" table="utilisateur">
+    <id name="id" type="java.lang.Integer">
+      <column name="id"/>
+      <generator class="identity"/>
+    </id>
+    <property name="nom" type="string">
+      <column length="45" name="Nom"/>
+    </property>
+    <property name="pernom" type="string">
+      <column length="45" name="Pernom"/>
+    </property>
+    <property name="cin" type="string">
+      <column length="8" name="CIN" unique="true"/>
+    </property>
+    <property name="dateNaissance" type="date">
+      <column length="10" name="DateNaissance"/>
+    </property>
+    <property name="adresse" type="string">
+      <column length="45" name="Adresse"/>
+    </property>
+    <property name="profession" type="string">
+      <column length="45" name="Profession"/>
+    </property>
+    <property name="telephone" type="java.lang.Double">
+      <column name="Telephone" precision="22" scale="0"/>
+    </property>
+    <property name="login" type="string">
+      <column length="45" name="Login" unique="true"/>
+    </property>
+    <property name="pass" type="string">
+      <column length="45" name="Pass"/>
+    </property>
+    <property name="role" type="string">
+      <column length="45" name="Role"/>
+    </property>
+    <property name="enabled" type="java.lang.Boolean">
+      <column name="Enabled"/>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="comptes" table="compte">
+      <key>
+        <column name="Utilisateur_id" not-null="true"/>
+      </key>
+      <one-to-many class="BusinessLayer.model.Compte"/>
+    </set>
+  </class>
+</hibernate-mapping>
